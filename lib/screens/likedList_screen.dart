@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:webtoon/models/webtoon_detail_model.dart';
+
+import 'package:webtoon/models/webtoon_model.dart';
 
 class LikedList extends StatefulWidget {
   const LikedList({super.key});
@@ -11,18 +14,16 @@ class LikedList extends StatefulWidget {
 
 class _LikedListState extends State<LikedList> {
   late SharedPreferences prefs;
-  late List<String>? idList;
-  List<Future<WebtoonDetailModel>> likedList = [];
-  bool isLoading = false;
+  late List<Map<String, dynamic>> likedList;
 
   Future initPrefs() async {
     prefs = await SharedPreferences.getInstance();
-    idList = prefs.getStringList('likedToons');
   }
 
   @override
   void initState() {
     super.initState();
+    initPrefs();
   }
 
   @override
@@ -40,6 +41,9 @@ class _LikedListState extends State<LikedList> {
             fontWeight: FontWeight.w400,
           ),
         ),
+      ),
+      body: const Column(
+        children: [Text("섹스")],
       ),
     );
   }

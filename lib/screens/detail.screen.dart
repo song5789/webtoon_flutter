@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webtoon/models/webtoon_detail_model.dart';
 import 'package:webtoon/models/webtoon_episodes_model.dart';
 import 'package:webtoon/services/api_service.dart';
 import 'package:webtoon/widgets/episode_widget.dart';
+import 'package:webtoon/widgets/likedList_button.dart';
 
 class DetailScreen extends StatefulWidget {
   final String title, thumb, id;
@@ -28,11 +31,15 @@ class _DetailScreenState extends State<DetailScreen> {
   Future initPrefs() async {
     prefs = await SharedPreferences.getInstance();
     final likedToons = prefs.getStringList('likedToons');
+    final Map<String, dynamic> target = {
+      'title': widget.title,
+      'thumb': widget.thumb,
+      'id': widget.id,
+    };
     if (likedToons != null) {
-      if (likedToons.contains(widget.id) == true) {
-        setState(() {
-          isLiked = true;
-        });
+      if (likedToons.contains(jsonEncode(target)) == true) {
+        isLiked = true;
+        setState(() {});
       }
     } else {
       await prefs.setStringList('likedToons', []);
@@ -41,11 +48,17 @@ class _DetailScreenState extends State<DetailScreen> {
 
   onHeartTap() async {
     final likedToons = prefs.getStringList('likedToons');
+    final Map<String, dynamic> target = {
+      'title': widget.title,
+      'thumb': widget.thumb,
+      'id': widget.id,
+    };
+
     if (likedToons != null) {
       if (isLiked) {
-        likedToons.remove(widget.id);
+        likedToons.remove(jsonEncode(target));
       } else {
-        likedToons.add(widget.id);
+        likedToons.add(jsonEncode(target));
       }
       await prefs.setStringList('likedToons', likedToons);
       setState(() {
@@ -66,6 +79,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      floatingActionButton: const LikedListButton(),
       appBar: AppBar(
         actions: [
           IconButton(
