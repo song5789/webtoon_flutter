@@ -1,16 +1,23 @@
 # webtoon
 
-A new Flutter project.
+NomadCoder's Flutter Basic examples.
 
-## Getting Started
+## 설명
 
-This project is a starting point for a Flutter application.
+노마드 코더의 플러터 기초강의.
+날짜와 요일 표시 기능 추가.
+에피소드 위젯 커스텀.
 
-A few resources to get you started if this is your first Flutter project:
+좋아요 목록을 보여주는 스크린을 추가로 만드려 했으나
+비동기 관련 구현이 복잡해졌음.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+좋아요 화면에 들어갔을 때 ID들은 잘 불러와지지만
+위젯에 정보를 넣거나, detail 모델로 리스트를 만들어 뿌리려할 때
+프로퍼티가 초기화 되기전에 위젯이 빌드되며 계속 오류가 뜸.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+(아니면 좋아요 목록에 ID 뿐만 아니라 제목, 섬네일 등등을 넣어버리면 가능할듯?
+또는 FutureBuilder 를 이용하거나... )
+
+###
+
+위 설명은 생각한거 적어놓은 그냥 메모임.
