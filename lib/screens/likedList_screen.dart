@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:webtoon/models/webtoon_detail_model.dart';
 import 'package:webtoon/models/webtoon_model.dart';
+import 'package:webtoon/widgets/likedwebtoon_widget.dart';
+import 'package:webtoon/widgets/webtoon_widget.dart';
 
 class LikedList extends StatefulWidget {
   const LikedList({super.key});
@@ -14,10 +16,20 @@ class LikedList extends StatefulWidget {
 
 class _LikedListState extends State<LikedList> {
   late SharedPreferences prefs;
-  late List<Map<String, dynamic>> likedList;
+  late List<WebtoonModel> likedList = [];
 
   Future initPrefs() async {
     prefs = await SharedPreferences.getInstance();
+    final toonlists = prefs.getStringList("likedToons");
+    if (toonlists != null) {
+      for (var item in toonlists) {
+        var toon = WebtoonModel.fromJson(jsonDecode(item));
+        likedList.add(toon);
+      }
+      setState(() {});
+    } else {
+      await prefs.setStringList("likedToons", []);
+    }
   }
 
   @override
@@ -42,9 +54,27 @@ class _LikedListState extends State<LikedList> {
           ),
         ),
       ),
-      body: const Column(
-        children: [Text("섹스")],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 50,
+          vertical: 30,
+        ),
+        child: likedItem(likedList),
       ),
+    );
+  }
+
+  ListView likedItem(List<WebtoonModel> likedList) {
+    return ListView.separated(
+      scrollDirection: Axis.vertical,
+      itemBuilder: (context, index) {
+        var likedWebtoon = likedList[index];
+        return LikedWebtoon(likedWebtoon: likedWebtoon);
+      },
+      separatorBuilder: (context, index) => const SizedBox(
+        height: 15,
+      ),
+      itemCount: likedList.length,
     );
   }
 }
